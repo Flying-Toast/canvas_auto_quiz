@@ -1,0 +1,15 @@
+{
+	"manifest_version": 3,
+	"name": "Canvas AutoQuiz",
+	"version": "0.1",
+	"icons": {
+		"48": "icon48.png"
+	},
+	"action": {
+		"default_icon": "icon48.png",
+		"default_popup": "popup.html",
+		"default_title": "AutoQuiz"
+	},
+	"host_permissions": ["*://canvas.case.edu/*"],
+	"permissions": ["activeTab", "scripting"]
+}
