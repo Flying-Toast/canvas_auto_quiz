@@ -10,14 +10,14 @@ async function collectAttempts(courseId, quizId, version, acc) {
 }
 
 function extractCorrectResponses(doc) {
-	return Array.from(doc.querySelectorAll(".question.multiple_choice_question"))
-		.filter(i => !i.classList.contains("incorrect") && i.querySelector(".answers_wrapper .selected_answer") != null)
+	return Array.from(doc.querySelectorAll(".question.multiple_choice_question, .question.multiple_answers_question"))
+		.filter(i => !i.classList.contains("incorrect") && !i.classList.contains("partial_credit") && i.querySelector(".answers_wrapper .selected_answer") != null)
 		.map(i => {
-			const selectedAnswer = i.querySelector(".answers_wrapper .selected_answer");
+			const selectedAnswers = Array.from(i.querySelectorAll(".answers_wrapper .selected_answer"));
 
 			return {
 				questionId: i.id,
-				answerId: selectedAnswer.id
+				answerIds: selectedAnswers.map(i => i.id)
 			};
 		});
 }
@@ -28,7 +28,9 @@ function afterCollection(pages) {
 	for (const i of correctAnswers) {
 		if (!seenQuestionIds.has(i.questionId)) {
 			seenQuestionIds.add(i.questionId);
-			document.querySelector(`#${i.questionId}_${i.answerId}`).click();
+			for (const answerId of i.answerIds) {
+				document.querySelector(`#${i.questionId}_${answerId}`).click();
+			}
 		}
 	}
 }
