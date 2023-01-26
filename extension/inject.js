@@ -34,14 +34,14 @@ function afterCollection(pages) {
 }
 
 (async function() {
-	if (window.__alreadyDidQuizAutofill === true) {
-		alert("Quiz already filled!");
-		return;
-	}
-	window.__alreadyDidQuizAutofill = true;
-
 	const takeMatcher = /^\/courses\/([0-9]+)\/quizzes\/([0-9]+)\/take$/;
 	if (takeMatcher.test(location.pathname)) {
+		if (window.__alreadyDidQuizAutofill === true) {
+			alert("Quiz already filled!");
+			return;
+		}
+		window.__alreadyDidQuizAutofill = true;
+
 		const [_full, courseId, quizId] = location.pathname.match(takeMatcher);
 		await collectAttempts(courseId, quizId, 1, []);
 	} else {
