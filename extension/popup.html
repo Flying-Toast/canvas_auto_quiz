@@ -4,14 +4,46 @@
 		<meta charset="utf-8">
 		<style>
 			body {
+				background-color: #FEFEFE;
+			}
+
+			.big-button {
 				width: 200px;
-				height: 300px;
+				height: 40px;
+				border-radius: 3px;
+				--tl-border-color: #77BAFF;
+				--main-border-color: #2D7ED1;
+				border: 3px solid var(--main-border-color);
+				border-top-color: var(--tl-border-color);
+				border-left-color: var(--tl-border-color);
+				background-color: #5AA4EF;
+				cursor: pointer;
+				font-weight: bold;
+			}
+
+			.big-button:active {
+				border-color: var(--tl-border-color);
+				border-top-color: var(--main-border-color);
+				border-left-color: var(--main-border-color);
+				padding-top: 3px;
+			}
+
+			.small-p {
+				font-size: 10px;
+			}
+
+			.text-center {
+				text-align: center;
 			}
 		</style>
 	</head>
 
 	<body>
-		<button id="prefill-button">Prefill Answers</button>
+		<div class="text-center">
+			<button class="big-button mx-auto" id="prefill-button">AutoFill Answers</button>
+		</div>
+
+		<p class="small-p">If anything stops working, please contact srs266.</p>
 
 		<script src="/popup.js"></script>
 	</body>

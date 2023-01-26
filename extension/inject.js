@@ -2,10 +2,10 @@ async function collectAttempts(courseId, quizId, version, acc) {
 	const resp = await fetch(`${location.origin}/courses/${courseId}/quizzes/${quizId}/history?version=${version}`);
 	if (resp.ok) {
 		const text = await resp.text();
-		collectAttempts(courseId, quizId, version + 1, acc.concat(text));
+		return collectAttempts(courseId, quizId, version + 1, acc.concat(text));
 	} else {
 		let mapped = acc.map(i => (new DOMParser()).parseFromString(i, "text/html"));
-		afterCollection(mapped);
+		return afterCollection(mapped);
 	}
 }
 
@@ -33,19 +33,23 @@ function afterCollection(pages) {
 			}
 		}
 	}
+	return seenQuestionIds.size;
 }
 
 (async function() {
 	const takeMatcher = /^\/courses\/([0-9]+)\/quizzes\/([0-9]+)\/take$/;
 	if (takeMatcher.test(location.pathname)) {
-		if (window.__alreadyDidQuizAutofill === true) {
-			alert("Quiz already filled!");
+		if (window.__prefillIsInProgress === true) {
+			alert("Please wait - a filling is already in progress.");
 			return;
 		}
-		window.__alreadyDidQuizAutofill = true;
+		window.__prefillIsInProgress = true;
 
 		const [_full, courseId, quizId] = location.pathname.match(takeMatcher);
-		await collectAttempts(courseId, quizId, 1, []);
+		const numFilled = await collectAttempts(courseId, quizId, 1, []);
+
+		window.__prefillIsInProgress = false;
+		alert(`Done! Prefilled ${numFilled} correct answers from previous attempts.`);
 	} else {
 		alert("Can't autofill - you are not currently taking a Canvas quiz");
 	}

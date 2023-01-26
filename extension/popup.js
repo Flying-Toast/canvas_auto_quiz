@@ -2,7 +2,7 @@ if (typeof chrome != "undefined") {
 	var browser = chrome;
 }
 
-browser.tabs.query({active: true})
+browser.tabs.query({active: true, currentWindow: true})
 	.then(tabs => {
 		document.querySelector("#prefill-button").addEventListener("click", function() {
 			browser.scripting.executeScript({
